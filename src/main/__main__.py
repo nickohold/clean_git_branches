@@ -97,22 +97,22 @@ def pop_stash_by_name(stash_name:str):
     return
 
 def start():
-    cwd = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
-    caution = sys.argv[2] if len(sys.argv) > 2 else True
+    cwd_arg = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
+    
+    caution_arg_str = sys.argv[2] if len(sys.argv) > 2 else "true"
+    parsed_caution = False if caution_arg_str.lower() == "false" else True
 
-    current_working_directory = os.getcwd()
-    os.chdir(cwd)
+    original_cwd = os.getcwd()
     try:
-        delete_local_branches(current_working_directory, caution=caution)
+        os.chdir(cwd_arg)
+        delete_local_branches(os.getcwd(), caution=parsed_caution)
+    except FileNotFoundError:
+        print(f"Error: Directory not found: {cwd_arg}")
     except git.exc.InvalidGitRepositoryError as error:
         print(f"Could not delete local branches because repo was not available, or it was not yet initialized.")
         print(f"You can pass the path to the repo or any sub folder of a repo as the first argument to the script.")
-    os.chdir(current_working_directory)
+    finally:
+        os.chdir(original_cwd)
 
 if __name__ == "__main__":
-    # get first and second arguments
-    # first argument is the path to the repo
-    # second argument is the caution flag
-    cwd = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
-    caution = sys.argv[2] if len(sys.argv) > 2 else True
-    start(cwd, caution)
+    start()

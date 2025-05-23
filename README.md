@@ -17,15 +17,17 @@ To use clean-git-branches, navigate to the root of your local git repository in 
 
 It is also possible pass the path as the first argument:
 ```clean_git_branches "/Users/butler/my_repo/"```
+If the path argument is omitted or if `.` is passed, the script will operate in the current working directory.
+Using `""` (an empty string) as the path argument will result in an error, as it is not a valid directory.
 
 The cleaner is set the be cautious by default, asking the user to verify deleting the local branches.
-In order to bypass this, pass ```False``` as the second argument. Examples:
+In order to bypass this, pass ```False``` (case-insensitive) as the second argument. For example:
 ```clean_git_branches "/Users/butler/my_repo/" False```
-```clean_git_branches "" False``` - will default the path to the current working directory
+Any case variation of "false" (e.g., "False", "false", "FALSE") will be interpreted as `False`.
 
 The program will then check for stale branches and prompt the user to confirm before deleting them (unless bypassed).
 
-By default, the program will also protect certain branches from being deleted (master, main, dev) in case they exist on the remote repository. To change the list of protected branches, you can modify the "protected_branches" variable in the clean-git-branches.py file.
+By default, the program will also protect certain branches from being deleted (master, main, dev) in case they exist on the remote repository. To change the list of protected branches, you can modify the `protected_branches` variable in the `src/main/__main__.py` file.
 
 ```Please note that this program is only compatible with Git.```
 
